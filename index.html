@@ -1,0 +1,821 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pasar Malam Tycoon 🏮</title>
+<meta name="description" content="Panggang satay, layan pelanggan, buka gerai kat 3 lokasi dan jadi Raja Pasar Malam dalam 30 hari! Main terus kat browser.">
+<meta property="og:title" content="Pasar Malam Tycoon 🏮">
+<meta property="og:description" content="Panggang satay, layan pelanggan, buka gerai kat 3 lokasi dan jadi Raja Pasar Malam dalam 30 hari! Main terus kat browser.">
+<meta property="og:type" content="website">
+<!-- Add a 1200x630 image after you deploy so the link shows a nice preview on Threads:
+<meta property="og:image" content="https://YOUR-SITE.netlify.app/og.png">
+<meta name="twitter:card" content="summary_large_image">
+-->
+<meta name="theme-color" content="#120f33">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏮</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg1:#120f33;--bg2:#2d2a63;--card:rgba(255,255,255,.08);--line:rgba(255,255,255,.14);--amber:#ffb703;--red:#ef476f;--green:#3ddc97;--text:#fff6e5;--muted:#b9b4d6}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;color:var(--text);font-family:"Baloo 2",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{min-height:100vh;min-height:100dvh;background:linear-gradient(180deg,var(--bg1),var(--bg2) 60%,#3b2f63) fixed;-webkit-user-select:none;user-select:none}
+#app{max-width:480px;margin:0 auto;padding:max(10px,env(safe-area-inset-top)) 14px max(28px,env(safe-area-inset-bottom));position:relative}
+h1{font-size:44px;line-height:1;margin:6px 0 8px;font-weight:800;text-shadow:0 3px 0 #0006}
+h2{margin:6px 0;font-size:24px}
+.center{text-align:center}
+.muted{color:var(--muted)}
+.s{font-size:13px}
+.big{font-size:48px;line-height:1}
+
+/* string lights */
+.lights{display:flex;justify-content:space-between;padding:0 6px;margin:0 0 10px;border-top:2px solid #0005;height:18px}
+.lights span{width:10px;height:14px;border-radius:50% 50% 55% 55%;box-shadow:0 0 10px currentColor;animation:glow 1.6s ease-in-out infinite alternate;margin-top:-1px}
+@keyframes glow{from{opacity:.5}to{opacity:1}}
+
+/* common */
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin:10px 0}
+.btn{border:0;border-radius:14px;padding:11px 16px;font:inherit;font-weight:700;font-size:16px;color:#2a1700;background:linear-gradient(#ffd166,var(--amber));box-shadow:0 4px 0 #b57b00;cursor:pointer;touch-action:manipulation}
+.btn:active{transform:translateY(2px);box-shadow:0 2px 0 #b57b00}
+.btn.ghost{background:var(--card);color:var(--text);box-shadow:none;border:1px solid var(--line)}
+.btn.wide{width:100%;font-size:20px;padding:14px}
+.btn.mini{padding:6px 12px;font-size:14px;border-radius:10px;box-shadow:0 3px 0 #b57b00;white-space:nowrap}
+.btn:disabled{opacity:.4;box-shadow:none;cursor:not-allowed;transform:none}
+.sm{width:40px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--text);font:inherit;font-weight:800;font-size:15px;cursor:pointer;touch-action:manipulation}
+.sm:active{background:rgba(255,255,255,.2)}
+.pill{background:rgba(0,0,0,.3);border-radius:999px;padding:5px 12px;font-weight:700;font-size:14px;white-space:nowrap}
+.hud{display:flex;gap:8px;justify-content:space-between;align-items:center;margin-bottom:6px}
+
+/* title */
+.lantern{font-size:64px;animation:sway 3s ease-in-out infinite alternate;transform-origin:top center;display:inline-block}
+@keyframes sway{from{transform:rotate(-8deg)}to{transform:rotate(8deg)}}
+.how div{padding:4px 0;font-size:15px}
+
+/* prep */
+.forecast{display:flex;gap:10px;align-items:center}
+.forecast .fe{font-size:34px}
+.item .ihead{display:flex;gap:10px;align-items:center;margin-bottom:6px}
+.item .ie{font-size:32px}
+.ctl{display:flex;align-items:center;justify-content:space-between;padding:4px 0}
+.ctl .lbl{font-weight:700;width:56px}
+.steps{display:flex;align-items:center;gap:6px}
+.val{min-width:64px;text-align:center;font-weight:800;font-size:17px}
+.meter{height:6px;border-radius:6px;background:rgba(255,255,255,.12);overflow:hidden;margin:4px 0 2px}
+.meter i{display:block;height:100%;border-radius:6px}
+.up,.loc{display:flex;align-items:center;gap:10px;padding:8px;border-top:1px solid var(--line)}
+.up:first-of-type,.loc:first-of-type{border-top:0}
+.loc{border:1px solid transparent;border-radius:12px;margin-top:6px}
+.loc.sel{border-color:var(--amber);background:rgba(255,183,3,.1)}
+.ue,.le{font-size:28px}
+.ut,.lt{flex:1;line-height:1.2}
+.tag{color:var(--green);font-weight:700;font-size:14px;white-space:nowrap}
+.sticky{position:sticky;bottom:0;padding:10px 0 4px;background:linear-gradient(transparent,#2d2a63 35%)}
+
+/* night */
+.tbar{height:8px;border-radius:8px;background:rgba(255,255,255,.12);overflow:hidden;margin-bottom:6px}
+.tbar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--amber),var(--red))}
+.evline{text-align:center;font-weight:700;margin:2px 0 6px;font-size:14px}
+.scene{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(#1b1747,#251f5a)}
+.awning{height:28px;background:repeating-linear-gradient(90deg,#ef476f 0 28px,#fff6e5 28px 56px);border-bottom:4px solid #0004;box-shadow:0 6px 12px #0005}
+.queue{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px;min-height:150px;align-content:start}
+.cust{border:1px solid var(--line);background:rgba(255,255,255,.1);color:var(--text);border-radius:14px;padding:5px 3px 7px;font:inherit;text-align:center;cursor:pointer;touch-action:manipulation;position:relative}
+.cust:active{background:rgba(255,255,255,.25)}
+.cust[data-type=pakcik]{border-color:#ef476faa}
+.cust[data-type=budak]{border-color:#4cc9f0aa}
+.cust[data-type=makcik]{border-color:#06d6a0aa}
+.cust[data-type=influencer]{border-color:#ffd166;box-shadow:0 0 12px #ffd16677}
+.ctype{font-size:11px;font-weight:700;color:var(--muted);line-height:1}
+.cust .face{font-size:30px;line-height:1.1}
+.order{display:flex;justify-content:center;flex-wrap:wrap;gap:2px 6px;font-size:18px;line-height:1.15}
+.cprice{font-size:12px;font-weight:700;color:var(--amber)}
+.pbar{height:6px;border-radius:6px;background:rgba(0,0,0,.35);overflow:hidden;margin:4px 6px 0}
+.pbar i{display:block;height:100%;width:100%;background:var(--green)}
+.cust.pop{animation:pop .22s ease-out}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+.cust.happy{animation:happy .38s forwards;pointer-events:none}
+@keyframes happy{to{transform:translateY(-14px) scale(.9);opacity:0}}
+.cust.angry{animation:angry .38s forwards;pointer-events:none}
+@keyframes angry{20%{transform:translateX(-5px)}40%{transform:translateX(5px)}to{transform:translateX(0) scale(.8);opacity:0}}
+.cust.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.float{position:absolute;font-weight:800;color:var(--amber);pointer-events:none;white-space:nowrap;text-shadow:0 2px 4px #000a;animation:floatup .95s ease-out forwards;z-index:5}
+@keyframes floatup{from{transform:translate(-50%,0)}to{transform:translate(-50%,-44px);opacity:0}}
+.rain::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(105deg,transparent 0 9px,rgba(160,200,255,.28) 9px 10px);animation:rain .45s linear infinite;pointer-events:none}
+@keyframes rain{to{background-position:-24px 60px}}
+
+/* grill */
+.grill{margin-top:8px;border:1px solid var(--line);border-radius:16px;padding:8px 10px 10px;background:linear-gradient(#2a1f1a,#1d1512)}
+.gh{display:flex;justify-content:space-between;align-items:center;font-weight:800;margin-bottom:6px;font-size:15px}
+.slots{display:grid;grid-template-columns:repeat(auto-fit,minmax(76px,1fr));gap:8px}
+.slot{border:2px solid var(--line);border-radius:12px;background:rgba(255,255,255,.06);color:var(--text);font:inherit;padding:5px 3px 7px;text-align:center;cursor:pointer;touch-action:manipulation}
+.slot:active{background:rgba(255,255,255,.18)}
+.sicon{font-size:24px;line-height:1.1;position:relative;display:inline-block}
+.slab{font-size:12px;font-weight:700;line-height:1.1}
+.smeter{position:relative;height:8px;border-radius:8px;margin:6px 4px 0;background:linear-gradient(90deg,#6b7280 0 45%,#3ddc97 45% 62%,#ffd166 62% 78%,#ef476f 78% 100%)}
+.mark{position:absolute;top:-3px;left:0;width:4px;height:14px;margin-left:-2px;background:#fff;border-radius:2px;box-shadow:0 0 4px #000}
+.slot.empty .smeter,.slot.burnt .smeter{opacity:.25}
+.slot.empty .mark,.slot.burnt .mark{display:none}
+.slot.z-good{border-color:var(--green)}
+.slot.z-perfect{border-color:#ffd166;box-shadow:0 0 12px #ffd16699}
+.slot.z-danger{border-color:var(--red);animation:pulse .35s infinite alternate}
+.slot.burnt{border-color:#555;opacity:.8}
+@keyframes pulse{to{background:rgba(239,71,111,.35)}}
+.slot.cook .sicon::after{content:'💨';position:absolute;right:-12px;top:-8px;font-size:13px;opacity:0;animation:smoke 1.1s ease-out infinite}
+@keyframes smoke{from{transform:translateY(6px);opacity:.9}to{transform:translateY(-12px);opacity:0}}
+.stockbar{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+.chip{background:var(--card);border:1px solid var(--line);border-radius:12px;text-align:center;padding:4px 2px;font-weight:800;line-height:1.1}
+.chip span{font-size:20px;display:block}
+.chip small{display:block;font-size:10px;color:var(--muted);font-weight:700}
+.chip.zero{border-color:var(--red);color:var(--red)}
+
+/* summary */
+.net{font-size:40px;font-weight:800}
+.net.pos{color:var(--green)}.net.neg{color:var(--red)}
+.tbl{width:100%;border-collapse:collapse}
+.tbl td{padding:5px 0;border-top:1px solid var(--line)}
+.tbl tr:first-child td{border-top:0}
+.tbl td:last-child{text-align:right;font-weight:700}
+.tip{background:rgba(255,183,3,.12);border:1px solid rgba(255,183,3,.4);border-radius:12px;padding:8px 10px;margin-top:8px;font-size:14px}
+.rank{font-size:30px;font-weight:800;color:var(--amber);line-height:1.1;margin:6px 0}
+
+#toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);background:#000c;color:#fff;padding:10px 16px;border-radius:12px;font-weight:700;opacity:0;transition:.25s;pointer-events:none;z-index:50;max-width:90%;text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(() => {
+'use strict';
+
+/* ================= CONFIG (tweak balance here) ================= */
+const DAYS = 30;            // length of a season
+const NIGHT = 50;           // seconds per night
+const START_MONEY = 100;
+const SPAWN = 1.7;          // avg seconds between customers (before multipliers)
+const BATCH = 4;            // satay sticks per grill batch
+const COOK = 8;             // seconds from raw to burnt
+const ZONE = { good: .45, p0: .62, p1: .78 };   // cook progress: raw < good < perfect < danger < 1.0 (burnt)
+const RENT = d => 10 + Math.floor((d - 1) / 5) * 3;
+const PBT_FINE = 25;
+const RANKS = [[1500, 'Raja Pasar Malam 👑'], [900, 'Towkay Pasar Malam 🤑'], [400, 'Tauke Gerai 😎'], [-1, 'Peniaga Baru 🌱']];
+
+const ITEMS = [
+  { id: 'satay',   name: 'Satay',         emoji: '🍢', cost: 0.8, base: 2.0, w: 30, grill: true },
+  { id: 'apam',    name: 'Apam Balik',    emoji: '🥞', cost: 1.0, base: 3.0, w: 25 },
+  { id: 'keropok', name: 'Keropok Lekor', emoji: '🍤', cost: 0.6, base: 1.5, w: 25 },
+  { id: 'tebu',    name: 'Air Tebu',      emoji: '🥤', cost: 0.5, base: 2.0, w: 20 },
+];
+const UPGRADES = [
+  { id: 'lampu',    emoji: '💡', name: 'Lampu LED',      desc: '+20% pelanggan setiap level',        max: 3, costs: [40, 80, 120] },
+  { id: 'helper',   emoji: '🧑‍🍳', name: 'Pekerja',        desc: 'Layan pelanggan secara automatik',   max: 3, costs: [70, 120, 190] },
+  { id: 'gerai',    emoji: '🏪', name: 'Gerai Besar',    desc: 'Barisan +2 & pelanggan lebih sabar', max: 2, costs: [90, 150] },
+  { id: 'panggang', emoji: '🔥', name: 'Panggang Besar', desc: '+1 slot panggang satay',             max: 2, costs: [60, 110] },
+  { id: 'khemah',   emoji: '⛺', name: 'Khemah',         desc: 'Hujan tak jejaskan jualan sangat',   max: 1, costs: [60] },
+  { id: 'peti',     emoji: '🧊', name: 'Peti Sejuk',     desc: '50% stok tak habis boleh simpan',    max: 1, costs: [90] },
+  { id: 'lesen',    emoji: '📜', name: 'Lesen Niaga',    desc: 'Kebal denda PBT',                    max: 1, costs: [50] },
+];
+const EVENTS = {
+  normal: { name: 'Malam biasa',      emoji: '🌙', text: 'Tiada apa-apa istimewa malam ni.' },
+  hujan:  { name: 'Hujan lebat',      emoji: '🌧️', text: 'Hujan malam ni. Orang malas keluar.' },
+  ramai:  { name: 'Cuti sekolah',     emoji: '🎒', text: 'Cuti sekolah! Pasar malam mesti penuh.' },
+  viral:  { name: 'Viral kat TikTok', emoji: '📱', text: 'Ada orang viralkan gerai kau kat TikTok!' },
+  pbt:    { name: 'Rondaan PBT',      emoji: '👮', text: 'Pegawai PBT akan meronda. Pastikan ada lesen.' },
+  minyak: { name: 'Harga bahan naik', emoji: '⛽', text: 'Harga bahan naik 30% hari ni.' },
+};
+const EVENT_BAG = [['normal', 40], ['hujan', 15], ['ramai', 15], ['viral', 6], ['pbt', 10], ['minyak', 14]];
+
+// wtp = how much over the base price they will pay (range). pat = seconds patience. qty = units ordered. pm = price multiplier.
+const TYPES = {
+  budak:      { name: 'Budak Sekolah', faces: ['🧒', '👦', '👧'], wtp: [.7, 1.25], pat: 8,   qty: [1, 2], pm: 1,   leave: 1.5 },
+  pakcik:     { name: 'Pakcik',        faces: ['👴', '👨'],       wtp: [.9, 1.7],  pat: 4.5, qty: [1, 1], pm: 1,   leave: 3 },
+  makcik:     { name: 'Makcik',        faces: ['👵', '🧕'],       wtp: [.85, 1.6], pat: 10,  qty: [2, 4], pm: .9,  leave: 1.5 },
+  influencer: { name: 'Influencer',    faces: ['💁', '🤳'],       wtp: [1.3, 2.3], pat: 3.6, qty: [1, 1], pm: 1,   leave: 2 },
+};
+const LOCS = {
+  kampung: { name: 'Pasar Malam Kampung', emoji: '🏘️', crowd: 1.0, rent: 1.0, wtp: 1.0,  unlock: 0,   desc: 'Orang kampung. Harga kena murah.',
+             mix: { budak: 40, pakcik: 30, makcik: 30, influencer: 0 } },
+  bandar:  { name: 'Pasar Malam Bandar',  emoji: '🏙️', crowd: 1.7, rent: 1.4, wtp: 1.2,  unlock: 180, desc: 'Lebih ramai & berduit. Ada influencer!',
+             mix: { budak: 30, pakcik: 25, makcik: 25, influencer: 20 } },
+  bazar:   { name: 'Bazar Ramadan',       emoji: '🌙', crowd: 2.4, rent: 1.9, wtp: 1.4,  unlock: 400, desc: 'Paling sibuk. Perlu pekerja!',
+             mix: { budak: 20, pakcik: 20, makcik: 30, influencer: 30 } },
+};
+
+/* ================= helpers ================= */
+const $ = (s, r = document) => r.querySelector(s);
+const app = $('#app');
+const rm = n => 'RM ' + n.toFixed(2);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const rand = (a, b) => a + Math.random() * (b - a);
+const randInt = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const SAVE_KEY = 'pmt2_save', BEST_KEY = 'pmt2_best', MUTE_KEY = 'pmt_mute';
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+  del(k) { try { localStorage.removeItem(k); } catch (e) {} },
+};
+let muted = store.get(MUTE_KEY) === '1';
+let AC = null;
+function beep(f = 880, d = .08, type = 'sine', v = .05) {
+  if (muted) return;
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.type = type; o.frequency.value = f; g.gain.value = v;
+    o.connect(g); g.connect(AC.destination); o.start();
+    g.gain.exponentialRampToValueAtTime(.0001, AC.currentTime + d);
+    o.stop(AC.currentTime + d);
+  } catch (e) {}
+}
+function toast(t) {
+  let el = $('#toast');
+  if (!el) { el = document.createElement('div'); el.id = 'toast'; document.body.appendChild(el); }
+  el.textContent = t; el.classList.add('show');
+  clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), 2000);
+}
+function lightsHTML() {
+  const cols = ['#ef476f', '#ffd166', '#06d6a0', '#4cc9f0', '#f78c6b'];
+  let s = '<div class="lights">';
+  for (let i = 0; i < 18; i++) s += `<span style="background:${cols[i % 5]};color:${cols[i % 5]};animation-delay:${(i % 6) * .25}s"></span>`;
+  return s + '</div>';
+}
+function wpick(pairs) {
+  let r = Math.random() * pairs.reduce((s, e) => s + e[1], 0);
+  for (const [k, w] of pairs) { if ((r -= w) < 0) return k; }
+  return pairs[0][0];
+}
+
+/* ================= state ================= */
+let S = null;   // persistent game state
+let N = null;   // current night (transient)
+
+function newGame() {
+  const o = {
+    day: 1, money: START_MONEY, rep: 50, daySpent: 0, totalServed: 0,
+    loc: 'kampung', unlocked: { kampung: true, bandar: false, bazar: false },
+    stock: {}, price: {}, plan: {}, up: {},
+    ev: 'normal', forecast: 'normal', last: null, over: null,
+  };
+  ITEMS.forEach(it => { o.stock[it.id] = 0; o.price[it.id] = it.base; o.plan[it.id] = 8; });
+  UPGRADES.forEach(u => o.up[u.id] = 0);
+  return o;
+}
+const save = () => store.set(SAVE_KEY, JSON.stringify(S));
+const LOC = () => LOCS[S.loc];
+const costOf = it => it.cost * (S.ev === 'minyak' ? 1.3 : 1);
+const planCost = () => ITEMS.reduce((s, it) => s + S.plan[it.id] * costOf(it), 0);
+const rentToday = () => Math.round(RENT(S.day) * LOC().rent);
+const itemById = id => ITEMS.find(i => i.id === id);
+
+// share of customers (at this location) who would still pay price p
+function acceptPct(it, p) {
+  const L = LOC(); let a = 0, w = 0;
+  for (const t in L.mix) {
+    const wt = L.mix[t]; if (!wt) continue;
+    const lo = TYPES[t].wtp[0] * L.wtp, hi = TYPES[t].wtp[1] * L.wtp;
+    a += wt * clamp((hi - p / it.base) / (hi - lo), 0, 1); w += wt;
+  }
+  return a / w;
+}
+function custMult(ev) {
+  let m = 1;
+  if (ev === 'hujan') m = S.up.khemah ? 0.85 : 0.5;
+  else if (ev === 'ramai') m = 1.5;
+  else if (ev === 'viral') m = 2;
+  return m * (1 + 0.2 * S.up.lampu) * (0.7 + 0.6 * S.rep / 100) * LOC().crowd;
+}
+function rollEvent() {
+  if (S.day === 1) { S.forecast = S.ev = 'normal'; return; }
+  const f = wpick(EVENT_BAG);
+  S.forecast = f;
+  S.ev = (['hujan', 'ramai', 'viral', 'pbt'].includes(f) && Math.random() < .15) ? 'normal' : f;
+}
+function clipPlan() {
+  for (const it of ITEMS) {
+    const others = planCost() - S.plan[it.id] * costOf(it);
+    const maxQ = Math.max(0, Math.floor((S.money - others) / costOf(it) + 1e-9));
+    S.plan[it.id] = Math.min(S.plan[it.id], maxQ);
+  }
+}
+function startDay() {
+  S.daySpent = 0;
+  rollEvent();
+  clipPlan();
+  save();
+  renderPrep();
+  window.scrollTo(0, 0);
+}
+
+/* ================= screens ================= */
+function validSave(o) {
+  return o && o.day && o.up && o.stock && o.loc && o.unlocked && o.up.panggang !== undefined;
+}
+function renderTitle() {
+  let best = null, saved = null;
+  try { best = JSON.parse(store.get(BEST_KEY) || 'null'); } catch (e) {}
+  try { saved = JSON.parse(store.get(SAVE_KEY) || 'null'); } catch (e) {}
+  if (!validSave(saved)) saved = null;
+  app.innerHTML = `
+    ${lightsHTML()}
+    <div class="center">
+      <div class="lantern">🏮</div>
+      <h1>Pasar Malam<br>Tycoon</h1>
+      <p class="muted" style="margin:0 0 6px">Panggang, layan, naik taraf. Jadi <b style="color:var(--amber)">Raja Pasar Malam</b> dalam ${DAYS} hari.</p>
+      <div class="card how" style="text-align:left">
+        <div>☀️ <b>Pagi:</b> beli stok, set harga, naik taraf, pilih lokasi</div>
+        <div>🔥 <b>Malam:</b> panggang satay (ambil bila hijau/emas, jangan hangus!)</div>
+        <div>👆 Tekan pelanggan untuk layan. Pakcik tak sabar, makcik beli banyak, influencer bayar mahal tapi cepat blah</div>
+        <div>💰 Bayar sewa tiap hari. Jangan sampai muflis!</div>
+      </div>
+      ${best ? `<p class="muted s">Rekod terbaik: <b>${best.rank}</b> · ${rm(best.money)}</p>` : ''}
+      <button class="btn wide" data-act="new">Mula Main</button>
+      ${saved ? `<button class="btn wide ghost" style="margin-top:10px;font-size:17px" data-act="continue">Sambung (Hari ${saved.day})</button>` : ''}
+      <p style="margin-top:14px"><button class="btn ghost mini" data-act="mute" style="box-shadow:none">${muted ? '🔇 Bunyi off' : '🔊 Bunyi on'}</button></p>
+    </div>`;
+}
+
+function renderPrep() {
+  const fe = EVENTS[S.forecast], L = LOC();
+  const left = S.money - planCost();
+  const est = Math.round(NIGHT * custMult(S.forecast) / SPAWN);
+  const haveStock = ITEMS.some(it => S.stock[it.id] + S.plan[it.id] > 0);
+  const uncertain = ['hujan', 'ramai', 'viral', 'pbt'].includes(S.forecast);
+  app.innerHTML = `
+    ${lightsHTML()}
+    <div class="hud">
+      <span class="pill">☀️ Hari ${S.day}/${DAYS}</span>
+      <span class="pill">💰 ${rm(left)}</span>
+      <span class="pill">⭐ ${Math.round(S.rep)}</span>
+    </div>
+    <div class="card forecast">
+      <div class="fe">${fe.emoji}</div>
+      <div><b>Ramalan: ${fe.name}</b><div class="muted s">${fe.text}${uncertain ? ' (ramalan boleh meleset)' : ''}<br>Dijangka ±${est} orang lalu gerai. Sewa hari ni: ${rm(rentToday())}</div></div>
+    </div>
+    <div class="card">
+      <b>📍 Lokasi</b>
+      ${Object.keys(LOCS).map(id => {
+        const l = LOCS[id], un = S.unlocked[id], sel = S.loc === id;
+        return `<div class="loc ${sel ? 'sel' : ''}"><span class="le">${l.emoji}</span>
+          <div class="lt"><b>${l.name}</b><div class="muted s">${l.desc}<br>Ramai ×${l.crowd} · Sewa ×${l.rent} · Mampu bayar ×${l.wtp}</div></div>
+          ${sel ? '<span class="tag">Sini ✔</span>'
+            : un ? `<button class="btn mini" data-act="loc" data-id="${id}">Pergi</button>`
+            : `<button class="btn mini" data-act="unlock" data-id="${id}" ${left < l.unlock ? 'disabled' : ''}>🔓 ${rm(l.unlock)}</button>`}
+        </div>`;
+      }).join('')}
+    </div>
+    ${ITEMS.map(it => {
+      const c = costOf(it), q = S.plan[it.id], p = S.price[it.id], pr = Math.round(acceptPct(it, p) * 100);
+      const col = pr > 66 ? 'var(--green)' : pr > 33 ? 'var(--amber)' : 'var(--red)';
+      return `<div class="card item">
+        <div class="ihead"><span class="ie">${it.emoji}</span>
+          <div><b>${it.name}</b>${it.grill ? ' <span class="muted s">🔥 kau panggang sendiri</span>' : ''}<div class="muted s">Kos ${rm(c)}/biji · ${it.grill ? 'Mentah' : 'Stok'} ada: <b>${S.stock[it.id]}</b></div></div></div>
+        <div class="ctl"><span class="lbl">Beli</span><div class="steps">
+          <button class="sm" data-act="plan" data-id="${it.id}" data-d="-5">−5</button>
+          <button class="sm" data-act="plan" data-id="${it.id}" data-d="-1">−</button>
+          <span class="val">${q}</span>
+          <button class="sm" data-act="plan" data-id="${it.id}" data-d="1">+</button>
+          <button class="sm" data-act="plan" data-id="${it.id}" data-d="5">+5</button></div></div>
+        <div class="ctl"><span class="lbl">Harga</span><div class="steps">
+          <button class="sm" data-act="price" data-id="${it.id}" data-d="-0.1">−</button>
+          <span class="val">${rm(p)}</span>
+          <button class="sm" data-act="price" data-id="${it.id}" data-d="0.1">+</button></div></div>
+        <div class="meter"><i style="width:${pr}%;background:${col}"></i></div>
+        <div class="muted s">${pr}% pembeli kat sini sanggup bayar · untung ${rm(p - c)}/biji</div>
+      </div>`;
+    }).join('')}
+    <div class="card">
+      <b>🔧 Naik taraf gerai</b>
+      ${UPGRADES.map(u => {
+        const lv = S.up[u.id], maxed = lv >= u.max, cost = u.costs[lv];
+        return `<div class="up"><span class="ue">${u.emoji}</span>
+          <div class="ut"><b>${u.name}</b> ${u.max > 1 ? `<span class="muted s">Lv ${lv}/${u.max}</span>` : ''}<div class="muted s">${u.desc}</div></div>
+          ${maxed ? '<span class="tag">Siap ✔</span>'
+            : `<button class="btn mini" data-act="buy" data-id="${u.id}" ${left < cost ? 'disabled' : ''}>${rm(cost)}</button>`}
+        </div>`;
+      }).join('')}
+      ${S.day > DAYS - 6 ? '<div class="tip">💡 Hari-hari last: naik taraf mungkin tak sempat balik modal.</div>' : ''}
+    </div>
+    <div class="sticky">
+      <button class="btn wide" data-act="start" ${haveStock ? '' : 'disabled'}>Buka Gerai 🌙 ${planCost() > 0 ? '(−' + rm(planCost()) + ')' : ''}</button>
+    </div>`;
+}
+
+function renderNight() {
+  const ev = EVENTS[S.ev];
+  N.evText = `${ev.emoji} ${ev.name}${S.ev !== S.forecast ? ' (ramalan meleset!)' : ''} · ${LOC().emoji} ${LOC().name}`;
+  app.innerHTML = `
+    ${lightsHTML()}
+    <div class="hud">
+      <span class="pill" id="h-time">⏱ ${NIGHT}s</span>
+      <span class="pill" id="h-rev">💰 ${rm(0)}</span>
+      <span class="pill" id="h-rep">⭐ ${Math.round(S.rep)}</span>
+    </div>
+    <div class="tbar"><i id="tfill"></i></div>
+    <div class="evline" id="evline">${N.evText}</div>
+    <div class="scene ${S.ev === 'hujan' ? 'rain' : ''}">
+      <div class="awning"></div>
+      <div class="queue" id="queue"></div>
+    </div>
+    <div class="grill">
+      <div class="gh"><span>🔥 Panggang Satay</span><span class="muted s">Tekan slot kosong · ambil bila hijau/emas</span></div>
+      <div class="slots" id="slots"></div>
+    </div>
+    <div class="stockbar" id="stockbar"></div>`;
+  buildSlots();
+  updateStock();
+}
+
+function renderSummary() {
+  const L = S.last, ev = EVENTS[S.ev], loc = LOCS[L.loc];
+  const tips = [];
+  if (L.burnt >= 4) tips.push('🔥 Satay banyak hangus. Ambil bila marker kat hijau/emas!');
+  if (L.lostStock >= 4) tips.push('📦 Banyak pelanggan balik sebab stok habis. Beli lebih esok.');
+  if (L.lostPrice >= 8) tips.push('💸 Ramai kata mahal. Cuba turunkan harga sikit.');
+  if (L.lostWait >= 5) tips.push('⏳ Ramai tak sempat dilayan. Pekerja atau Gerai Besar boleh tolong.');
+  if (L.wasted >= 10) tips.push('🗑️ Stok terbuang bernilai ' + rm(L.wasted) + '. Kurangkan belian atau beli Peti Sejuk.');
+  if (!tips.length && L.net > 0) tips.push('👍 Bagus! Teruskan, dan fikir nak naik taraf atau pindah lokasi.');
+  app.innerHTML = `
+    ${lightsHTML()}
+    <div class="card center">
+      <div class="big">${L.net >= 0 ? '📈' : '📉'}</div>
+      <h2>Hari ${S.day} tamat</h2>
+      <div class="muted s">${ev.emoji} ${ev.name} · ${loc.emoji} ${loc.name}</div>
+      <div class="net ${L.net >= 0 ? 'pos' : 'neg'}">${L.net >= 0 ? '+' : '−'}${rm(Math.abs(L.net))}</div>
+      <div class="muted s">untung bersih hari ni</div>
+    </div>
+    <div class="card">
+      <table class="tbl">
+        <tr><td>Pelanggan dilayan</td><td>${L.served}</td></tr>
+        <tr><td>Jualan</td><td>${rm(L.rev)}</td></tr>
+        <tr><td>Beli stok, naik taraf & lokasi</td><td>−${rm(L.spent)}</td></tr>
+        <tr><td>Sewa tapak</td><td>−${rm(L.rent)}</td></tr>
+        ${L.fine ? `<tr><td>Denda PBT 👮</td><td>−${rm(L.fine)}</td></tr>` : ''}
+        ${L.burnt ? `<tr><td>Satay hangus 🔥</td><td>${L.burnt} batang</td></tr>` : ''}
+        <tr><td><b>Duit sekarang</b></td><td>${rm(S.money)}</td></tr>
+      </table>
+      <div class="muted s" style="margin-top:8px">Hilang: ${L.lostPrice} kata mahal · ${L.lostStock} stok habis · ${L.lostWait} lambat/penuh</div>
+      ${L.unpaid ? '<div class="tip">🙏 Duit tak cukup bayar penuh. Tuan tanah bagi muka kali ni.</div>' : ''}
+      ${tips.map(t => `<div class="tip">${t}</div>`).join('')}
+    </div>
+    <button class="btn wide" data-act="next">${S.over || S.day >= DAYS ? 'Lihat Keputusan 🏆' : 'Hari Seterusnya ☀️'}</button>`;
+}
+
+function rankOf(m) { for (const [t, n] of RANKS) if (m >= t) return n; return RANKS[RANKS.length - 1][1]; }
+function bestLoc() { return S.unlocked.bazar ? 'bazar' : S.unlocked.bandar ? 'bandar' : 'kampung'; }
+function renderEnd() {
+  const bankrupt = S.over === 'bankrupt';
+  const rank = bankrupt ? 'Muflis 😭' : rankOf(S.money);
+  S.finalRank = rank;
+  store.del(SAVE_KEY);
+  if (!bankrupt) {
+    let best = null; try { best = JSON.parse(store.get(BEST_KEY) || 'null'); } catch (e) {}
+    if (!best || S.money > best.money) store.set(BEST_KEY, JSON.stringify({ rank, money: S.money }));
+  }
+  const bl = LOCS[bestLoc()];
+  app.innerHTML = `
+    ${lightsHTML()}
+    <div class="card center">
+      <div class="big">${bankrupt ? '🪦' : '🏆'}</div>
+      <h2>${bankrupt ? 'Gerai tutup...' : `${DAYS} hari tamat!`}</h2>
+      <div class="muted s">${bankrupt ? 'Modal dah habis. Tak apa, cuba lagi!' : 'Pangkat kau:'}</div>
+      <div class="rank">${rank}</div>
+      <div class="net ${bankrupt ? 'neg' : 'pos'}">${rm(S.money)}</div>
+      <div class="muted s">${S.totalServed} pelanggan dilayan · lokasi terjauh: ${bl.emoji} ${bl.name}${bankrupt ? ' · bertahan ' + S.day + ' hari' : ''}</div>
+    </div>
+    <button class="btn wide" data-act="share">Kongsi Skor 🧵</button>
+    <button class="btn wide ghost" style="margin-top:10px;font-size:17px" data-act="new">Main Lagi</button>
+    <button class="btn wide ghost" style="margin-top:10px;font-size:17px" data-act="home">Menu</button>`;
+}
+
+/* ================= night logic ================= */
+function pickItem() { return itemById(wpick(ITEMS.map(i => [i.id, i.w]))); }
+function pickType() { return wpick(Object.entries(LOC().mix).filter(e => e[1] > 0)); }
+function makeOrder(T) {
+  const n = randInt(T.qty[0], T.qty[1]);
+  const a = pickItem();
+  if (n >= 2 && Math.random() < .5) {
+    let b = pickItem(), g = 0;
+    while (b === a && g++ < 6) b = pickItem();
+    if (b !== a) { const q2 = Math.floor(n / 2); return [{ it: a, n: n - q2 }, { it: b, n: q2 }]; }
+  }
+  return [{ it: a, n }];
+}
+const haveOf = it => it.grill ? N.ready : S.stock[it.id];
+const grillable = () => S.stock.satay > 0 || N.slots.some(s => s.state === 'cook');
+const satayAvail = () => N.ready > 0 || grillable();
+const needWait = c => c.order.some(l => l.it.grill && N.ready <= 0 && grillable());
+const orderTotal = c => c.order.reduce((s, l) => s + S.price[l.it.id] * l.n, 0) * c.T.pm;
+
+function floatText(text, x, y) {
+  const q = $('#queue'); if (!q) return;
+  const f = document.createElement('div');
+  f.className = 'float'; f.textContent = text;
+  f.style.left = x + 'px'; f.style.top = y + 'px';
+  q.appendChild(f); setTimeout(() => f.remove(), 950);
+}
+function floatRandom(text) {
+  const q = $('#queue'); if (!q) return;
+  floatText(text, rand(50, Math.max(60, q.clientWidth - 50)), rand(2, 30));
+}
+function floatAt(c, text) { floatText(text, c.el.offsetLeft + c.el.offsetWidth / 2, c.el.offsetTop); }
+function updateStock() {
+  const el = $('#stockbar'); if (!el) return;
+  el.innerHTML = ITEMS.map(it => it.grill
+    ? `<div class="chip ${N.ready + S.stock.satay <= 0 ? 'zero' : ''}"><span>${it.emoji}</span>${N.ready}<small>siap · ${S.stock.satay} mentah</small></div>`
+    : `<div class="chip ${S.stock[it.id] <= 0 ? 'zero' : ''}"><span>${it.emoji}</span>${S.stock[it.id]}</div>`).join('');
+}
+function updateHud() {
+  const t = $('#h-time'); if (!t) return;
+  t.textContent = '⏱ ' + Math.max(0, Math.ceil(NIGHT - N.t)) + 's';
+  $('#h-rev').textContent = '💰 ' + rm(N.rev);
+  $('#h-rep').textContent = '⭐ ' + Math.round(S.rep);
+  $('#tfill').style.width = (100 - (N.t / NIGHT) * 100) + '%';
+  const ev = $('#evline'); if (ev) ev.textContent = N.evText + (N.boostT > 0 ? ' · 📱 VIRAL!' : '');
+}
+
+/* customers */
+function addCustEl(c) {
+  const el = document.createElement('button');
+  el.className = 'cust pop'; el.dataset.act = 'serve'; el.dataset.id = c.id; el.dataset.type = c.type;
+  el.innerHTML = `<div class="ctype">${c.T.name}</div><div class="face">${c.face}</div>
+    <div class="order">${c.order.map(l => `<span>${l.it.emoji}${l.n > 1 ? '×' + l.n : ''}</span>`).join('')}</div>
+    <div class="cprice">${rm(orderTotal(c))}</div><div class="pbar"><i></i></div>`;
+  $('#queue').appendChild(el);
+  c.el = el; c.bar = el.querySelector('.pbar i');
+}
+function updateCustEl(c) {
+  const f = clamp(c.p / c.max, 0, 1);
+  c.bar.style.width = (f * 100) + '%';
+  c.bar.style.background = f > .5 ? 'var(--green)' : f > .25 ? 'var(--amber)' : 'var(--red)';
+}
+function retire(c, cls) {
+  N.cust = N.cust.filter(x => x !== c);
+  c.el.classList.remove('pop', 'shake'); c.el.classList.add(cls); c.el.disabled = true;
+  setTimeout(() => c.el.remove(), 400);
+}
+function spawn() {
+  const type = pickType(), T = TYPES[type], L = LOC();
+  const wtp = rand(T.wtp[0], T.wtp[1]) * L.wtp;
+  let order = makeOrder(T).filter(l => S.price[l.it.id] / l.it.base <= wtp);
+  if (!order.length) { N.lostPrice++; S.rep = clamp(S.rep - .3, 0, 100); floatRandom('Mahal la! 💸'); return; }
+  order = order.filter(l => l.it.grill ? satayAvail() : S.stock[l.it.id] > 0);
+  if (!order.length) { N.lostStock++; S.rep = clamp(S.rep - 1, 0, 100); floatRandom('Dah habis 😢'); beep(180, .12, 'sawtooth', .03); return; }
+  if (N.cust.length >= 4 + 2 * S.up.gerai) { N.lostWait++; S.rep = clamp(S.rep - .5, 0, 100); floatRandom('Penuh! 😵'); return; }
+  const pat = T.pat + 1.5 * S.up.gerai;
+  const c = { id: N.nextId++, type, T, order, p: pat, max: pat, face: T.faces[Math.floor(Math.random() * T.faces.length)] };
+  N.cust.push(c); addCustEl(c);
+}
+function serve(c, auto) {
+  if (!N || !N.running || !N.cust.includes(c)) return false;
+  if (needWait(c)) {
+    if (!auto) {
+      c.el.classList.remove('shake'); void c.el.offsetWidth; c.el.classList.add('shake');
+      floatAt(c, 'Belum siap 🔥'); beep(300, .06, 'square', .03);
+    }
+    return false;
+  }
+  let rev = 0, units = 0, short = false;
+  for (const l of c.order) {
+    const have = haveOf(l.it), n = Math.min(l.n, have), price = S.price[l.it.id];
+    if (n < l.n) short = true;
+    if (n <= 0) continue;
+    if (l.it.grill) {
+      N.ready -= n;
+      const pf = Math.min(n, N.perfect); N.perfect -= pf;
+      N.perfect = Math.min(N.perfect, N.ready);
+      rev += price * (n + .25 * pf);
+    } else { S.stock[l.it.id] -= n; rev += price * n; }
+    units += n;
+  }
+  if (units === 0) {
+    N.lostStock++; S.rep = clamp(S.rep - 1, 0, 100);
+    floatAt(c, 'Habis! 😢'); retire(c, 'angry'); beep(180, .12, 'sawtooth', .03); updateStock(); return true;
+  }
+  rev *= c.T.pm;
+  S.money += rev; N.rev += rev; N.served++;
+  S.rep = clamp(S.rep + (short ? -.3 : .4), 0, 100);
+  if (c.type === 'influencer' && c.p / c.max > .5) {
+    S.rep = clamp(S.rep + 3, 0, 100); N.boostT = 6; floatAt(c, '📱 Viral!');
+  } else floatAt(c, '+' + rev.toFixed(2));
+  retire(c, 'happy');
+  updateStock(); updateHud();
+  beep(988, .07); setTimeout(() => beep(1319, .09), 70);
+  return true;
+}
+
+/* grill */
+function buildSlots() {
+  const box = $('#slots'); if (!box) return;
+  box.innerHTML = '';
+  N.slots.forEach((s, i) => {
+    const el = document.createElement('button');
+    el.className = 'slot empty'; el.dataset.act = 'slot'; el.dataset.i = i;
+    el.innerHTML = '<div class="sicon">➕</div><div class="slab">Panggang</div><div class="smeter"><i class="mark"></i></div>';
+    box.appendChild(el);
+    s.el = el; s.icon = el.querySelector('.sicon'); s.lab = el.querySelector('.slab'); s.mark = el.querySelector('.mark');
+    s.cls = 'slot empty'; s.iconT = '➕'; s.labT = 'Panggang';
+  });
+}
+function paintSlot(s) {
+  let cls = 'slot ' + s.state, icon = '➕', lab = 'Panggang';
+  if (s.state === 'cook') {
+    icon = '🍢' + (s.n > 1 ? '×' + s.n : '');
+    lab = s.p < ZONE.good ? 'Mentah…' : s.p < ZONE.p0 ? 'Siap ✅' : s.p < ZONE.p1 ? 'Sempurna ✨' : 'Cepat! 🔥';
+    cls += ' z-' + (s.p < ZONE.good ? 'raw' : s.p < ZONE.p0 ? 'good' : s.p < ZONE.p1 ? 'perfect' : 'danger');
+    s.mark.style.left = (clamp(s.p, 0, 1) * 100) + '%';
+  } else if (s.state === 'burnt') { icon = '🔥'; lab = 'Hangus!'; }
+  if (s.msgT > 0) lab = s.msg;
+  if (s.cls !== cls) { s.el.className = cls; s.cls = cls; }
+  if (s.iconT !== icon) { s.icon.textContent = icon; s.iconT = icon; }
+  if (s.labT !== lab) { s.lab.textContent = lab; s.labT = lab; }
+}
+function tapSlot(i) {
+  if (!N || !N.running) return;
+  const s = N.slots[i]; if (!s) return;
+  if (s.state === 'empty') {
+    if (S.stock.satay <= 0) { s.msg = 'Habis mentah!'; s.msgT = .9; beep(300, .06, 'square', .03); paintSlot(s); return; }
+    const n = Math.min(BATCH, S.stock.satay);
+    S.stock.satay -= n; s.state = 'cook'; s.p = 0; s.n = n;
+    beep(520, .06); updateStock(); paintSlot(s);
+  } else if (s.state === 'cook') {
+    if (s.p < ZONE.good) {
+      s.msg = 'Belum masak!'; s.msgT = .7; beep(300, .06, 'square', .03);
+      s.el.classList.remove('shake'); void s.el.offsetWidth; s.el.classList.add('shake');
+      paintSlot(s); return;
+    }
+    const perfect = s.p >= ZONE.p0 && s.p < ZONE.p1;
+    N.ready += s.n;
+    if (perfect) { N.perfect += s.n; S.rep = clamp(S.rep + .5, 0, 100); s.msg = 'Sempurna! ✨'; beep(1175, .1); }
+    else { s.msg = 'Siap!'; beep(880, .07); }
+    s.msgT = .8; s.state = 'empty'; s.n = 0; s.p = 0;
+    updateStock(); paintSlot(s);
+  }
+}
+
+/* night flow */
+function startNight() {
+  const spent = planCost();
+  S.money -= spent; S.daySpent += spent;
+  ITEMS.forEach(it => { S.stock[it.id] += S.plan[it.id]; });
+  N = {
+    t: 0, spawnT: 2.5, cust: [], nextId: 1, rev: 0, served: 0, lostPrice: 0, lostStock: 0, lostWait: 0,
+    helperT: 0, boostT: 0, ready: 0, perfect: 0, burnt: 0, slots: [], evText: '', running: true, last: performance.now(),
+  };
+  for (let i = 0; i < 2 + S.up.panggang; i++) N.slots.push({ state: 'empty', p: 0, n: 0, t: 0, msg: '', msgT: 0 });
+  renderNight();
+  window.scrollTo(0, 0);
+  requestAnimationFrame(loop);
+}
+function loop(now) {
+  if (!N || !N.running) return;
+  const dt = Math.min(.1, (now - N.last) / 1000); N.last = now;
+  N.t += dt;
+  if (N.boostT > 0) N.boostT -= dt;
+  N.spawnT -= dt;
+  while (N.spawnT <= 0) { spawn(); N.spawnT += (SPAWN / (custMult(S.ev) * (N.boostT > 0 ? 1.4 : 1))) * rand(.6, 1.4); }
+  for (const c of N.cust.slice()) {
+    c.p -= dt;
+    if (c.p <= 0) {
+      N.lostWait++; S.rep = clamp(S.rep - c.T.leave, 0, 100);
+      floatAt(c, c.type === 'pakcik' ? 'Lambat! 😠' : 'Lambat! 😤');
+      retire(c, 'angry'); beep(180, .1, 'sawtooth', .03);
+    } else updateCustEl(c);
+  }
+  for (const s of N.slots) {
+    if (s.msgT > 0) s.msgT -= dt;
+    if (s.state === 'cook') {
+      s.p += dt / COOK;
+      if (s.p >= 1) { s.state = 'burnt'; s.t = 1.6; N.burnt += s.n; s.msg = 'Hangus! −' + s.n; s.msgT = 1.6; beep(150, .25, 'sawtooth', .04); }
+    } else if (s.state === 'burnt') {
+      s.t -= dt; if (s.t <= 0) { s.state = 'empty'; s.n = 0; s.p = 0; }
+    }
+    paintSlot(s);
+  }
+  if (S.up.helper > 0) {
+    N.helperT += dt;
+    if (N.helperT >= [0, 3.6, 2.6, 1.8][S.up.helper]) {
+      const target = N.cust.find(c => !needWait(c));
+      if (target) { N.helperT = 0; serve(target, true); }
+    }
+  }
+  updateHud();
+  if (N.t >= NIGHT) { endNight(); return; }
+  requestAnimationFrame(loop);
+}
+function endNight() {
+  N.running = false;
+  N.cust.forEach(() => { S.rep = clamp(S.rep - .5, 0, 100); });
+  const L = LOC();
+  const rent = rentToday();
+  const fine = (S.ev === 'pbt' && !S.up.lesen) ? Math.round(PBT_FINE * L.rent) : 0;
+  let wasted = 0, carried = 0;
+  const inGrill = N.slots.reduce((a, s) => a + (s.state === 'cook' ? s.n : 0), 0);
+  wasted += inGrill * itemById('satay').cost;
+  S.stock.satay += N.ready;               // cooked leftovers count as satay left over
+  ITEMS.forEach(it => {
+    const left = S.stock[it.id], keep = S.up.peti ? Math.floor(left * .5) : 0;
+    wasted += (left - keep) * it.cost; carried += keep; S.stock[it.id] = keep;
+  });
+  const owed = rent + fine, paid = Math.min(S.money, owed);
+  S.money -= paid;
+  S.totalServed += N.served;
+  S.last = {
+    loc: S.loc, served: N.served, rev: N.rev, spent: S.daySpent, rent, fine, wasted, burnt: N.burnt,
+    lostPrice: N.lostPrice, lostStock: N.lostStock, lostWait: N.lostWait,
+    unpaid: owed - paid, net: N.rev - S.daySpent - rent - fine,
+  };
+  if (S.money < 3 && carried === 0) S.over = 'bankrupt';
+  N = null;
+  renderSummary();
+  window.scrollTo(0, 0);
+}
+
+/* ================= actions ================= */
+async function share() {
+  const bl = LOCS[bestLoc()];
+  const text = `🏮 Pasar Malam Tycoon\nPangkat: ${S.finalRank}\n💰 ${rm(S.money)} · ${S.totalServed} pelanggan dilayan\n📍 ${bl.name}\nBerani cuba kalahkan aku?`;
+  try {
+    if (navigator.share) { await navigator.share({ title: 'Pasar Malam Tycoon', text, url: location.href }); return; }
+  } catch (e) { return; }
+  try { await navigator.clipboard.writeText(text + '\n' + location.href); toast('Disalin! Paste kat Threads 🧵'); }
+  catch (e) { window.prompt('Salin teks ni:', text + '\n' + location.href); }
+}
+
+function act(a, d) {
+  switch (a) {
+    case 'new': S = newGame(); startDay(); break;
+    case 'continue':
+      try {
+        const o = JSON.parse(store.get(SAVE_KEY));
+        if (!validSave(o)) throw 0;
+        S = o; clipPlan(); renderPrep(); window.scrollTo(0, 0);
+      } catch (e) { S = newGame(); startDay(); }
+      break;
+    case 'home': renderTitle(); break;
+    case 'mute': muted = !muted; store.set(MUTE_KEY, muted ? '1' : '0'); renderTitle(); break;
+    case 'plan': {
+      const it = itemById(d.id), delta = +d.d;
+      const others = planCost() - S.plan[it.id] * costOf(it);
+      const maxQ = Math.max(0, Math.floor((S.money - others) / costOf(it) + 1e-9));
+      S.plan[it.id] = clamp(S.plan[it.id] + delta, 0, maxQ);
+      renderPrep(); break;
+    }
+    case 'price': {
+      const it = itemById(d.id);
+      S.price[it.id] = clamp(Math.round((S.price[it.id] + +d.d) * 10) / 10, 0.5, it.base * 2.5);
+      renderPrep(); break;
+    }
+    case 'buy': {
+      const u = UPGRADES.find(x => x.id === d.id), cost = u.costs[S.up[u.id]];
+      if (cost !== undefined && S.money - planCost() >= cost) {
+        S.money -= cost; S.daySpent += cost; S.up[u.id]++;
+        beep(660, .1); setTimeout(() => beep(990, .12), 90);
+        save(); renderPrep();
+      }
+      break;
+    }
+    case 'loc':
+      if (S.unlocked[d.id]) { S.loc = d.id; save(); renderPrep(); }
+      break;
+    case 'unlock': {
+      const l = LOCS[d.id];
+      if (l && !S.unlocked[d.id] && S.money - planCost() >= l.unlock) {
+        S.money -= l.unlock; S.daySpent += l.unlock; S.unlocked[d.id] = true; S.loc = d.id;
+        beep(660, .1); setTimeout(() => beep(990, .12), 90); setTimeout(() => beep(1320, .15), 180);
+        save(); renderPrep();
+      }
+      break;
+    }
+    case 'start': startNight(); break;
+    case 'next':
+      if (S.over || S.day >= DAYS) renderEnd();
+      else { S.day++; startDay(); }
+      break;
+    case 'share': share(); break;
+  }
+}
+
+app.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]');
+  if (!b || b.dataset.act === 'serve' || b.dataset.act === 'slot' || b.disabled) return;
+  act(b.dataset.act, b.dataset);
+});
+// serve + grill respond on pointerdown so taps feel instant
+app.addEventListener('pointerdown', e => {
+  if (!N || !N.running) return;
+  const b = e.target.closest('[data-act="serve"],[data-act="slot"]');
+  if (!b) return;
+  e.preventDefault();
+  if (b.dataset.act === 'serve') {
+    const c = N.cust.find(x => x.id === +b.dataset.id);
+    if (c) serve(c, false);
+  } else tapSlot(+b.dataset.i);
+});
+
+renderTitle();
+})();
+</script>
+</body>
+</html>
